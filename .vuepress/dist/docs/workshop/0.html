@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>VuePress</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.618137b8.css" as="style"><link rel="preload" href="/assets/js/app.af5fbcab.js" as="script"><link rel="preload" href="/assets/js/2.6f3293a0.js" as="script"><link rel="preload" href="/assets/js/7.14ce2064.js" as="script"><link rel="prefetch" href="/assets/js/10.4e0f6192.js"><link rel="prefetch" href="/assets/js/11.4acc4e6f.js"><link rel="prefetch" href="/assets/js/12.6b4a710c.js"><link rel="prefetch" href="/assets/js/13.0706a30e.js"><link rel="prefetch" href="/assets/js/14.97379166.js"><link rel="prefetch" href="/assets/js/15.69a14343.js"><link rel="prefetch" href="/assets/js/16.656b014a.js"><link rel="prefetch" href="/assets/js/3.10c4db05.js"><link rel="prefetch" href="/assets/js/4.872f92f1.js"><link rel="prefetch" href="/assets/js/5.f561d97a.js"><link rel="prefetch" href="/assets/js/6.944254b0.js"><link rel="prefetch" href="/assets/js/8.71d3305e.js"><link rel="prefetch" href="/assets/js/9.1ff2cd94.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.618137b8.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container no-sidebar"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><!---->  <!----> </aside> <main class="page"> <div class="theme-default-content content__default"><p>GraphQL in .NET Core is a little bit different than the JavaScript implementation. Not a whole lot though.</p> <p>What is the same are the following concepts</p> <ul><li><strong>Schema</strong>, we still have the idea of a schema, something that specifies what Entities we have, what we can Query, what we can Mutate and so on</li> <li><strong>Resolver</strong>, we still have the concept of a Resolver, a piece of code that should be invoked when a Query or Mutation is made.</li> <li><strong>GQL</strong>, we still have the GraphQL Query Language to define our schema and we also use it to construct queries and mutations to try to read/write data</li></ul> <blockquote><p>So what is different?</p></blockquote> <p>The difference lies in how we resolve a query. The first thing we do when resolving a Query in GraphQL is to ensure the resource we ask for exist. If it does we invoke the corresponding Function. Below is same pseudo code the explains the difference in approach</p> <p>## JS Approach</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">// JavaScript</span>
+<span class="token keyword">const</span> resolverObject <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token function-variable function">hello</span><span class="token punctuation">:</span> <span class="token keyword">function</span> <span class="token function">resolver</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">return</span> <span class="token string">&quot;hello&quot;</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>In GQL we would ask for the resource <code>hello</code>. The inner core would find the resolver object and invoke the <code>resolver()</code> function.</p> <h2 id="c-approach"><a href="#c-approach" aria-hidden="true" class="header-anchor">#</a> C# Approach</h2> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token comment">// C#</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Query</span> 
+<span class="token punctuation">{</span>
+  <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;hello&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token keyword">string</span> <span class="token function">GetHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span> 
+  <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token string">&quot;World&quot;</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>Above we have the C# approach in which we have a <code>Query</code> class and a method that is decorated with an attribute class <code>GraphQLMetadata</code> and a parameter <code>hello</code> which is the resource it resolves. Invoking our <code>GetHello()</code> method would give us the answer we seek.</p> <p>That is a very brief explanation of how JavaScript and C# differs.</p></div> <footer class="page-edit"><!----> <!----></footer> <!----> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.af5fbcab.js" defer></script><script src="/assets/js/2.6f3293a0.js" defer></script><script src="/assets/js/7.14ce2064.js" defer></script>
+  </body>
+</html>

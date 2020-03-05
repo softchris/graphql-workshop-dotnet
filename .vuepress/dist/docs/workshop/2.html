@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>🔎 The GraphQL API</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.618137b8.css" as="style"><link rel="preload" href="/assets/js/app.af5fbcab.js" as="script"><link rel="preload" href="/assets/js/2.6f3293a0.js" as="script"><link rel="preload" href="/assets/js/9.1ff2cd94.js" as="script"><link rel="prefetch" href="/assets/js/10.4e0f6192.js"><link rel="prefetch" href="/assets/js/11.4acc4e6f.js"><link rel="prefetch" href="/assets/js/12.6b4a710c.js"><link rel="prefetch" href="/assets/js/13.0706a30e.js"><link rel="prefetch" href="/assets/js/14.97379166.js"><link rel="prefetch" href="/assets/js/15.69a14343.js"><link rel="prefetch" href="/assets/js/16.656b014a.js"><link rel="prefetch" href="/assets/js/3.10c4db05.js"><link rel="prefetch" href="/assets/js/4.872f92f1.js"><link rel="prefetch" href="/assets/js/5.f561d97a.js"><link rel="prefetch" href="/assets/js/6.944254b0.js"><link rel="prefetch" href="/assets/js/7.14ce2064.js"><link rel="prefetch" href="/assets/js/8.71d3305e.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.618137b8.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container no-sidebar"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><!---->  <!----> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="🔎-graphql"><a href="#🔎-graphql" aria-hidden="true" class="header-anchor">#</a> 🔎 GraphQL</h1> <p>Let's first give a little intro to GraphQL and the different parts it consist of.</p> <h2 id="concepts"><a href="#concepts" aria-hidden="true" class="header-anchor">#</a> Concepts</h2> <ul><li><strong>Schema</strong>, this is where you define your data types and what things you can query for</li> <li><strong>Resolvers</strong>, these are functions that are being invoked when you ask for something from the schema. Your resolvers should respond with data or change the data depending on what they are meant for.</li></ul> <h2 id="our-first-hello-world-api"><a href="#our-first-hello-world-api" aria-hidden="true" class="header-anchor">#</a> Our first hello world API</h2> <p>The easiest way to understand GraphQL is to build something with it and learn as we go.</p> <p>We will use something called <code>GQL</code> or <strong>G</strong>raphQL <strong>Q</strong>uery <strong>L</strong>anguage. We define our first simple schema like so:</p> <h3 id="schema"><a href="#schema" aria-hidden="true" class="header-anchor">#</a> Schema</h3> <div class="language- extra-class"><pre class="language-text"><code>type Query {
+  hello: String
+}
+</code></pre></div><p>At this point we have defined the built in type <code>Query</code> and we are saying there is one thing we can query for, namely <code>hello</code>. Note how we after <code>:</code> is saying <code>string</code>. This is us saying what the return type is for <code>hello</code>;</p> <p>This means we can pose a query like so:</p> <div class="language- extra-class"><pre class="language-text"><code>{
+  hello
+}
+</code></pre></div><p>We won't get an answer at this point because we haven't connected it to a resolver function that knows how to answer.</p> <p>Now, connecting a schema to a resolver is done differently depending on what library you use to build your GraphQL server.</p> <h3 id="resolver"><a href="#resolver" aria-hidden="true" class="header-anchor">#</a> Resolver</h3> <p>Let's define a resolver like it looks like in most implementations:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Query</span> 
+<span class="token punctuation">{</span>
+  <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;hello&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token keyword">string</span> <span class="token function">GetHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span> 
+  <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token string">&quot;World&quot;</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="custom-type"><a href="#custom-type" aria-hidden="true" class="header-anchor">#</a> Custom type</h3> <p>In GraphQL you have different primitives, also called scalar types, that can serve as inputs, return types. You can also combine several primitives to form a custom type. Lets first mention what those primitives are:</p> <ul><li><strong>String</strong>, this is your typical string type, containing string characters</li> <li><strong>ID</strong>, represents a unique identifier, signifies that it is not intended to be human‐readable</li> <li><strong>Float</strong>, A signed double-precision floating-point value</li> <li><strong>Int</strong>. A signed 32‐bit integer</li> <li><strong>Boolean</strong>, has the value true or false</li></ul> <p>So far we have only the queryable property <code>hello</code> and one resolver function. You are likely to want to build something more advanced than that and combining scalars in a group we can create a custom type like so:</p> <div class="language- extra-class"><pre class="language-text"><code>type Person {
+  id: ID!
+  name: String,
+  address: String,
+  speaker: Boolean
+}
+</code></pre></div><p>NOTE, we starting using exclamation character <code>!</code> on the <code>id</code> field, which means that this value cannot be <em>null</em>, i.e we can't leave it out.</p> <p>We can also, as mentioned use our custom type in our schema so we can extend it to look like so:</p> <div class="language- extra-class"><pre class="language-text"><code>type Person {
+  id: ID!
+  name: String,
+  address: String,
+  speaker: Boolean
+}
+
+type Query {
+  hello: string,
+  person: Person
+}
+</code></pre></div><p>which means we now need a new resolver function, like so:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Query</span> 
+<span class="token punctuation">{</span>
+  <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;hello&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token keyword">string</span> <span class="token function">GetHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span> 
+  <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token string">&quot;World&quot;</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;person&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token class-name">Person</span> <span class="token function">GetPerson</span><span class="token punctuation">(</span><span class="token punctuation">)</span> 
+  <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span> 
+      Id<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> 
+      Name<span class="token operator">=</span><span class="token string">&quot;Jen&quot;</span><span class="token punctuation">,</span>
+      Address <span class="token operator">=</span><span class="token string">&quot;One Microsoft Way Redmond USA&quot;</span><span class="token punctuation">,</span>
+      Speaker <span class="token operator">=</span> True
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><h3 id="list-type"><a href="#list-type" aria-hidden="true" class="header-anchor">#</a> List type</h3> <p>List type means that we can define in the schema that we get an array of whatever item back, like so:</p> <div class="language- extra-class"><pre class="language-text"><code>type Person {
+  id: ID!
+  name: String,
+  address: String,
+  speaker: Boolean
+}
+
+type Query {
+  hello: string,
+  person: Person,
+  people: [Person]
+}
+</code></pre></div><p>We add the queryable type <code>people</code> which has the return type <code>[Person]</code> which simply means a list of the type <code>Person</code>. This of course means that we need to add a resolver function for this so we extend our resolver object with yet another function <code>people</code>:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Query</span> 
+<span class="token punctuation">{</span>
+  <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;hello&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token keyword">string</span> <span class="token function">GetHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span> 
+  <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token string">&quot;World&quot;</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;person&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token class-name">Person</span> <span class="token function">GetPerson</span><span class="token punctuation">(</span><span class="token punctuation">)</span> 
+  <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span> 
+      Id<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> 
+      Name<span class="token operator">=</span><span class="token string">&quot;Jen&quot;</span><span class="token punctuation">,</span>
+      Address <span class="token operator">=</span><span class="token string">&quot;One Microsoft Way Redmond USA&quot;</span><span class="token punctuation">,</span>
+      Speaker <span class="token operator">=</span> True
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;people&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> List<span class="token operator">&lt;</span>Person<span class="token operator">&gt;</span> <span class="token function">GetPeople</span><span class="token punctuation">(</span><span class="token punctuation">)</span> 
+  <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token keyword">new</span> <span class="token generic-method"><span class="token function">List</span><span class="token punctuation">&lt;</span><span class="token class-name">Person</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+      <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token punctuation">{</span> 
+        Id<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> 
+        Name<span class="token operator">=</span><span class="token string">&quot;Jen&quot;</span><span class="token punctuation">,</span>
+        Address <span class="token operator">=</span><span class="token string">&quot;One Microsoft Way Redmond USA&quot;</span><span class="token punctuation">,</span>
+        Speaker <span class="token operator">=</span> True
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token punctuation">{</span> 
+        Id<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span> 
+        Name<span class="token operator">=</span><span class="token string">&quot;Chris&quot;</span><span class="token punctuation">,</span>
+        Address <span class="token operator">=</span><span class="token string">&quot;One Microsoft Way Redmond USA&quot;</span><span class="token punctuation">,</span>
+        Speaker <span class="token operator">=</span> True
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="query-with-argument"><a href="#query-with-argument" aria-hidden="true" class="header-anchor">#</a> Query with argument</h2> <p>Now you of course if going to want to filter down your response at some point by being able to ask for a specific item. Imagine you don't want the full list of people back but a specific person. For that use case we can expose a queryable that takes a parameter like so:</p> <div class="language- extra-class"><pre class="language-text"><code>type Person {
+  id: ID!
+  name: String,
+  address: String,
+  speaker: Boolean
+}
+
+type Query {
+  hello: string,
+  person: Person,
+  people: [Person],
+  getPerson(id: ID!): Person
+}
+</code></pre></div><p>Now, to add this to our resolver object we just need to add a matching name property <code>getPerson</code> but we also need to dig out the parameter from the incoming request object:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token keyword">var</span> people <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token generic-method"><span class="token function">List</span><span class="token punctuation">&lt;</span><span class="token class-name">Person</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span> 
+    Id<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> 
+    Name<span class="token operator">=</span><span class="token string">&quot;Jen&quot;</span><span class="token punctuation">,</span>
+    Address <span class="token operator">=</span><span class="token string">&quot;One Microsoft Way Redmond USA&quot;</span><span class="token punctuation">,</span>
+    Speaker <span class="token operator">=</span> True
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span> 
+    Id<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span> 
+    Name<span class="token operator">=</span><span class="token string">&quot;Chris&quot;</span><span class="token punctuation">,</span>
+    Address <span class="token operator">=</span><span class="token string">&quot;One Microsoft Way Redmond USA&quot;</span><span class="token punctuation">,</span>
+    Speaker <span class="token operator">=</span> True
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Query</span> 
+<span class="token punctuation">{</span>
+  <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;hello&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token keyword">string</span> <span class="token function">GetHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span> 
+  <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token string">&quot;World&quot;</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;person&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token class-name">Person</span> <span class="token function">GetPerson</span><span class="token punctuation">(</span><span class="token punctuation">)</span> 
+  <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span> 
+      Id<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> 
+      Name<span class="token operator">=</span><span class="token string">&quot;Jen&quot;</span><span class="token punctuation">,</span>
+      Address <span class="token operator">=</span><span class="token string">&quot;One Microsoft Way Redmond USA&quot;</span><span class="token punctuation">,</span>
+      Speaker <span class="token operator">=</span> True
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;people&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> List<span class="token operator">&lt;</span>Person<span class="token operator">&gt;</span> <span class="token function">GetPeople</span><span class="token punctuation">(</span><span class="token punctuation">)</span> 
+  <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> people<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;getPerson&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token class-name">Person</span> <span class="token function">GetPersonById</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">)</span> 
+  <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> people<span class="token punctuation">.</span><span class="token function">SingleOrDefault</span><span class="token punctuation">(</span> p <span class="token operator">=&gt;</span> p<span class="token punctuation">.</span>Id <span class="token operator">==</span> id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="mutation"><a href="#mutation" aria-hidden="true" class="header-anchor">#</a> Mutation</h2> <p>So far we have concentrated on learning scalars, custom types and how to build out our resolver object to be able to answer all of our queries and that really is the <em>bread and butter</em> of mastering GraphQL. But there is another construct we need to know about to be able to build a CRUD, <strong>C</strong>reate <strong>R</strong>ead <strong>U</strong>pdate <strong>D</strong>elete API, namely <em>mutations</em>. A <em>Mutation</em> is something that in GraphQL signals that we want to change something, either create something new, update it or remove it.</p> <p>Let's start with a very simple Mutation, adding an item to a list:</p> <div class="language- extra-class"><pre class="language-text"><code>type Mutation {
+  addItem(item: String): String
+}
+</code></pre></div><p>Just like anything inside of a <code>Query</code> we can invoke anything inside it like a public API so we can call <code>addItem</code> like so:</p> <div class="language- extra-class"><pre class="language-text"><code>addItem(item: &quot;my new item&quot;)
+</code></pre></div><p>Most of the time you might want a more complex input type than a scalar. At that we need to build such an input type, like so:</p> <div class="language- extra-class"><pre class="language-text"><code>input ProductInput {
+  id: ID!
+  name: String,
+  address: String,
+  speaker: Boolean
+}
+</code></pre></div><p>As you can see it's pretty much identical to our <code>type Person</code> and NO we can't use that one, we need to define something of type <code>input</code> like above. Let's add a <code>addPerson</code> property to our Schema:</p> <div class="language- extra-class"><pre class="language-text"><code>input PersonInput {
+  id: ID!
+  name: String,
+  address: String,
+  speaker: Boolean
+}
+
+type Person {
+  id: ID!
+  name: String,
+  address: String,
+  speaker: Boolean
+}
+
+type Mutation {
+  addPerson(person: PersonInput): Person
+}
+
+type Query {
+  hello: string,
+  person: Person,
+  people: [Person],
+  getPerson(id: ID!): Person
+}
+</code></pre></div><p>To invoke this mutation <code>addPerson</code> we type:</p> <div class="language- extra-class"><pre class="language-text"><code>addPerson(person: { id: 3, name: 'Amy', address: `One Microsoft Way Redmond USA`, speaker: true }) {
+  name
+}
+</code></pre></div><p>NOTE, we do get a return type of type <code>Person</code> so we need to select one or more columns as we are inserting a person but querying the response.</p> <p>lastly let's add our resolve function to our object:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token keyword">var</span> people <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token generic-method"><span class="token function">List</span><span class="token punctuation">&lt;</span><span class="token class-name">Person</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span> 
+    Id<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> 
+    Name<span class="token operator">=</span><span class="token string">&quot;Jen&quot;</span><span class="token punctuation">,</span>
+    Address <span class="token operator">=</span><span class="token string">&quot;One Microsoft Way Redmond USA&quot;</span><span class="token punctuation">,</span>
+    Speaker <span class="token operator">=</span> True
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span> 
+    Id<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span> 
+    Name<span class="token operator">=</span><span class="token string">&quot;Chris&quot;</span><span class="token punctuation">,</span>
+    Address <span class="token operator">=</span><span class="token string">&quot;One Microsoft Way Redmond USA&quot;</span><span class="token punctuation">,</span>
+    Speaker <span class="token operator">=</span> True
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Query</span> 
+<span class="token punctuation">{</span>
+  <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;hello&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token keyword">string</span> <span class="token function">GetHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span> 
+  <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token string">&quot;World&quot;</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;person&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token class-name">Person</span> <span class="token function">GetPerson</span><span class="token punctuation">(</span><span class="token punctuation">)</span> 
+  <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span> 
+      Id<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> 
+      Name<span class="token operator">=</span><span class="token string">&quot;Jen&quot;</span><span class="token punctuation">,</span>
+      Address <span class="token operator">=</span><span class="token string">&quot;One Microsoft Way Redmond USA&quot;</span><span class="token punctuation">,</span>
+      Speaker <span class="token operator">=</span> True
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;people&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> List<span class="token operator">&lt;</span>Person<span class="token operator">&gt;</span> <span class="token function">GetPeople</span><span class="token punctuation">(</span><span class="token punctuation">)</span> 
+  <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> people<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;getPerson&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token class-name">Person</span> <span class="token function">GetPersonById</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">)</span> 
+  <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> people<span class="token punctuation">.</span><span class="token function">SingleOrDefault</span><span class="token punctuation">(</span> p <span class="token operator">=&gt;</span> p<span class="token punctuation">.</span>Id <span class="token operator">==</span> id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;Mutation&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Mutation</span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">addPerson</span><span class="token punctuation">(</span><span class="token class-name">Person</span> person<span class="token punctuation">)</span> 
+  <span class="token punctuation">{</span>
+    people<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>person<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token string">&quot;Success creating &quot;</span> <span class="token operator">+</span> person<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="nested-type"><a href="#nested-type" aria-hidden="true" class="header-anchor">#</a> Nested type</h2> <p>Quite often we want to do queries where we query at depth and we might have a schema looking like this:</p> <div class="language- extra-class"><pre class="language-text"><code>type Person {
+  id: ID!
+  name: String,
+  address: String,
+  speaker: Boolean,
+  friend: Person
+}
+</code></pre></div><p>Especially note the property <code>friend</code>. There are two question we need an answer to here:</p> <ol><li>how do you store the data?</li> <li>how do we resolve <code>friend</code></li></ol> <p>Two very good questions and the answer is simple.
+As for how we store the data the answer is that our <code>friend</code> property needs to point to a primitive that represents the unique identifier, which means the data needs to look like this:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token keyword">var</span> person <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  Id <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span>
+  Name <span class="token operator">=</span> <span class="token string">&quot;Jen&quot;</span><span class="token punctuation">,</span>
+  Address <span class="token operator">=</span> <span class="token string">&quot;One Microsoft Way Redmond USA&quot;</span><span class="token punctuation">,</span>
+  Speaker <span class="token operator">=</span> True<span class="token punctuation">,</span>
+  Friend <span class="token operator">=</span> <span class="token number">2</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre></div><p>NOTE how <code>friend</code> has value <code>2</code>.</p> <p>Now to the next question, how to resolve this? What we mean by resolve is how to we support queries like this:</p> <div class="language- extra-class"><pre class="language-text"><code>{
+  person {
+    id,
+    name,
+    address,
+    friend {
+      name
+    }
+  }
+}
+</code></pre></div><p>As we said this is pretty simple once you know how. Let's go to our resolver object and update it like so:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token keyword">var</span> people <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token generic-method"><span class="token function">List</span><span class="token punctuation">&lt;</span><span class="token class-name">Person</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span> 
+    Id<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> 
+    Name<span class="token operator">=</span><span class="token string">&quot;Jen&quot;</span><span class="token punctuation">,</span>
+    Address <span class="token operator">=</span><span class="token string">&quot;One Microsoft Way Redmond USA&quot;</span><span class="token punctuation">,</span>
+    Speaker <span class="token operator">=</span> True<span class="token punctuation">,</span>
+    Friend <span class="token operator">=</span> <span class="token number">2</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span> 
+    Id<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span> 
+    Name<span class="token operator">=</span><span class="token string">&quot;Chris&quot;</span><span class="token punctuation">,</span>
+    Address <span class="token operator">=</span><span class="token string">&quot;One Microsoft Way Redmond USA&quot;</span><span class="token punctuation">,</span>
+    Speaker <span class="token operator">=</span> True<span class="token punctuation">,</span>
+    Friend <span class="token operator">=</span> <span class="token number">1</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Query</span> 
+<span class="token punctuation">{</span>
+  <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;hello&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token keyword">string</span> <span class="token function">GetHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span> 
+  <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token string">&quot;World&quot;</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;person&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token class-name">Person</span> <span class="token function">GetPerson</span><span class="token punctuation">(</span><span class="token punctuation">)</span> 
+  <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span> 
+      Id<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> 
+      Name<span class="token operator">=</span><span class="token string">&quot;Jen&quot;</span><span class="token punctuation">,</span>
+      Address <span class="token operator">=</span><span class="token string">&quot;One Microsoft Way Redmond USA&quot;</span><span class="token punctuation">,</span>
+      Speaker <span class="token operator">=</span> True
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;people&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> List<span class="token operator">&lt;</span>Person<span class="token operator">&gt;</span> <span class="token function">GetPeople</span><span class="token punctuation">(</span><span class="token punctuation">)</span> 
+  <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> people<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;getPerson&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token class-name">Person</span> <span class="token function">GetPersonById</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">)</span> 
+  <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> people<span class="token punctuation">.</span><span class="token function">SingleOrDefault</span><span class="token punctuation">(</span> p <span class="token operator">=&gt;</span> p<span class="token punctuation">.</span>Id <span class="token operator">==</span> id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;Mutation&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Mutation</span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">addPerson</span><span class="token punctuation">(</span><span class="token class-name">Person</span> person<span class="token punctuation">)</span> 
+  <span class="token punctuation">{</span>
+    people<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>person<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token string">&quot;Success creating &quot;</span> <span class="token operator">+</span> person<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> 
+<span class="token punctuation">}</span>
+
+<span class="token comment">// this is used to resolve `friend`</span>
+<span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;Person&quot;</span><span class="token punctuation">,</span> IsTypeOf<span class="token operator">=</span><span class="token keyword">typeof</span><span class="token punctuation">(</span>Person<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PersonResolver</span> 
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token class-name">Person</span> <span class="token function">Friend</span><span class="token punctuation">(</span><span class="token class-name">ResolveFieldContext</span> context<span class="token punctuation">,</span> <span class="token class-name">Person</span> source<span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> people<span class="token punctuation">.</span><span class="token function">SingleOrDefault</span><span class="token punctuation">(</span>p <span class="token operator">=&gt;</span> p<span class="token punctuation">.</span>Id <span class="token operator">==</span> source<span class="token punctuation">.</span>Friend<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>NOTE, the addition of <code>Person</code> and its inner property <code>friend</code> that points to a resolver function that gets passed the value <code>2</code> which it is able to resolve by filtering that out of the list <code>people</code>.</p> <h2 id="what-we-will-build"><a href="#what-we-will-build" aria-hidden="true" class="header-anchor">#</a> What we will build</h2> <p>We will build a GraphQL consisting of two different resources <code>Products</code> and <code>Reviews</code>. The idea is two:</p> <ol><li>Demonstrate how to build a GraphQL API</li> <li>Learn how to build your API to support nested queries</li></ol> <h3 id="part-i-install-and-set-up"><a href="#part-i-install-and-set-up" aria-hidden="true" class="header-anchor">#</a> Part I - Install and set up</h3> <p>We assume you have installed .NET Core already. If you haven't go to the <a href="https://docs.microsoft.com/en-us/dotnet/core/install/sdk?pivots=os-windows" target="_blank" rel="noopener noreferrer">install page<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <p><strong>Create a directory</strong>
+Next step is to create a directory and place yourself in it:</p> <div class="language- extra-class"><pre class="language-text"><code>mkdir api
+cd api
+</code></pre></div><p>Thereafter we need to create a Node.js project. The easiest way is by running this command:</p> <p><strong>Initialize a .NET Core project</strong></p> <div class="language- extra-class"><pre class="language-text"><code>dotnet new console -o api
+</code></pre></div><p>This will create a <code>console</code> project. You can definitely create a web project if you want to support things such <code>graphiql</code>, a visual environment to try out your queries.</p> <p><strong>Install dependencies</strong>
+Now you are ready for the next step which is to install GraphQL. We will do that by the following command:</p> <div class="language- extra-class"><pre class="language-text"><code>dotnet add package GraphQL
+</code></pre></div><blockquote><p>Currently I've set my .NET Core app to 2.2</p></blockquote> <p><strong>Create our Server</strong></p> <p>We will do the following:</p> <ul><li>Define schema</li> <li>Define a Query Class</li> <li>Execute a Query</li></ul> <p>Open up <code>Program.cs</code> and add the following at the top of the file:</p> <div class="language- extra-class"><pre class="language-text"><code>using GraphQL;
+using GraphQL.Types;
+</code></pre></div><p>in the <code>Main()</code> method:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token keyword">var</span> schema <span class="token operator">=</span> Schema<span class="token punctuation">.</span><span class="token function">For</span><span class="token punctuation">(</span><span class="token string">@&quot;
+  type Query {
+      hello: String
+  }
+  &quot;</span><span class="token punctuation">,</span> _ <span class="token operator">=&gt;</span>
+  <span class="token punctuation">{</span>
+  _<span class="token punctuation">.</span>Types<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Include</span><span class="token punctuation">&lt;</span><span class="token class-name">Query</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>Next add the <code>Query</code> class in the <code>Program.cs</code> file, like so:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token keyword">using</span> GraphQL<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Query</span>
+<span class="token punctuation">{</span>
+  <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;hello&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token keyword">string</span> <span class="token function">GetHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token string">&quot;World&quot;</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>Now to run a query we need the following code, still in <code>Main()</code> method:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token keyword">var</span> json <span class="token operator">=</span> schema<span class="token punctuation">.</span><span class="token function">Execute</span><span class="token punctuation">(</span>_ <span class="token operator">=&gt;</span>
+<span class="token punctuation">{</span>
+    _<span class="token punctuation">.</span>Query <span class="token operator">=</span> <span class="token string">&quot;{ hello }&quot;</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+Console<span class="token punctuation">.</span><span class="token function">WriteLine</span><span class="token punctuation">(</span>json<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>Next up, we want to run this. We do so by typing the following in the terminal:</p> <div class="language- extra-class"><pre class="language-text"><code>dotnet run
+</code></pre></div><p>You should now see something like this:</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+  <span class="token property">&quot;data&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;hello&quot;</span><span class="token operator">:</span> <span class="token string">&quot;World&quot;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="part-ii-custom-types"><a href="#part-ii-custom-types" aria-hidden="true" class="header-anchor">#</a> Part II - custom types</h3> <p>In this next part we will take our existing app and give it some more types, namely <code>products</code>. We will show how to:</p> <ul><li><strong>query</strong> for all products</li> <li><strong>query</strong> for a specific product</li> <li><strong>create</strong> a new product</li></ul> <p>Lets begin.</p> <p><strong>Refactoring</strong></p> <p>The first thing we will do is to separate our <code>Program.cs</code> into several files:</p> <ul><li><strong>Program.cs</strong> this will only be used to run queries on our schema</li> <li><strong>Schema.cs</strong>, this will contain our schema definition</li> <li><strong>Query.cs</strong> this will contain our resolver object</li></ul> <p>The content of these files should now be:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token comment">// Query.cs</span>
+
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">.</span>Types<span class="token punctuation">;</span>
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">;</span>
+
+<span class="token keyword">namespace</span> app 
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Query</span>
+  <span class="token punctuation">{</span>
+    <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;hello&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token keyword">public</span> <span class="token keyword">string</span> <span class="token function">GetHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token string">&quot;World&quot;</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token comment">// Schema.cs</span>
+
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">.</span>Types<span class="token punctuation">;</span>
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">;</span>
+
+<span class="token keyword">namespace</span> app 
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SchemaFactory</span> 
+  <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">ISchema</span> <span class="token function">Create</span><span class="token punctuation">(</span><span class="token punctuation">)</span> 
+    <span class="token punctuation">{</span>
+      <span class="token keyword">var</span> schema <span class="token operator">=</span> Schema<span class="token punctuation">.</span><span class="token function">For</span><span class="token punctuation">(</span><span class="token string">@&quot;
+          type Query {
+              hello: String
+          }
+      &quot;</span><span class="token punctuation">,</span> _ <span class="token operator">=&gt;</span>
+      <span class="token punctuation">{</span>
+        _<span class="token punctuation">.</span>Types<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Include</span><span class="token punctuation">&lt;</span><span class="token class-name">Query</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> schema<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token comment">// Program.cs</span>
+
+<span class="token keyword">using</span> System<span class="token punctuation">;</span>
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">;</span>
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">.</span>Types<span class="token punctuation">;</span>
+
+<span class="token keyword">namespace</span> app
+<span class="token punctuation">{</span>
+    <span class="token keyword">class</span> <span class="token class-name">Program</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">Main</span><span class="token punctuation">(</span><span class="token keyword">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword">var</span> schema <span class="token operator">=</span> SchemaFactory<span class="token punctuation">.</span><span class="token function">Create</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">var</span> json <span class="token operator">=</span> schema<span class="token punctuation">.</span><span class="token function">Execute</span><span class="token punctuation">(</span>_ <span class="token operator">=&gt;</span>
+            <span class="token punctuation">{</span>
+                _<span class="token punctuation">.</span>Query <span class="token operator">=</span> <span class="token string">&quot;{ hello }&quot;</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            Console<span class="token punctuation">.</span><span class="token function">WriteLine</span><span class="token punctuation">(</span>json<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><strong>Adding a custom type and some new queries</strong></p> <p>Ok, now that we added a custom type, lets open up <code>Schema.cs</code> and add the custom type <code>Product</code>:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token comment">// Schema.cs</span>
+
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">.</span>Types<span class="token punctuation">;</span>
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">;</span>
+
+<span class="token keyword">namespace</span> app
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SchemaFactory</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">ISchema</span> <span class="token function">Create</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">var</span> schema <span class="token operator">=</span> Schema<span class="token punctuation">.</span><span class="token function">For</span><span class="token punctuation">(</span><span class="token string">@&quot;
+          type Product {
+            id: ID,
+            name: String
+          }
+
+          type Query {
+            hello: String,
+            products: [Product],
+            product(id: ID!): Product
+          }
+      &quot;</span><span class="token punctuation">,</span> _ <span class="token operator">=&gt;</span>
+      <span class="token punctuation">{</span>
+        _<span class="token punctuation">.</span>Types<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Include</span><span class="token punctuation">&lt;</span><span class="token class-name">Query</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> schema<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>Above we have added the custom type <code>Product</code>, by doing this:</p> <div class="language- extra-class"><pre class="language-text"><code>type Product {
+  id: ID,
+  name: String
+}
+</code></pre></div><p>Then we have added the following to type <code>Schema.cs</code>:</p> <div class="language- extra-class"><pre class="language-text"><code>products: [Product],
+product(id: ID!): Product
+</code></pre></div><p>The first row means we can query for <code>products</code> and expect to get a product array back, as indicated by the array <code>[]</code> symbol.</p> <p>The second <code>product(id: ID!)</code>, means we added a query that made it possible to query for <code>product</code> but it needs a parameter <code>id</code>.</p> <p>Below is how you would invoke them:</p> <div class="language- extra-class"><pre class="language-text"><code>{
+  products {
+    name
+  }
+  product(id: 1) { 
+    name 
+  }
+}
+</code></pre></div><p><strong>Adding resolvers</strong></p> <p>We need to add resolver methods to be able to respond if the user types either <code>products</code> or <code>product</code>. For this we will open up <code>Query.cs</code> and ensure it looks like this:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token comment">// Query.cs</span>
+
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">.</span>Types<span class="token punctuation">;</span>
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">;</span>
+<span class="token keyword">using</span> System<span class="token punctuation">.</span>Linq<span class="token punctuation">;</span>
+<span class="token keyword">using</span> System<span class="token punctuation">.</span>Collections<span class="token punctuation">.</span>Generic<span class="token punctuation">;</span>
+
+<span class="token keyword">namespace</span> app
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Product</span> 
+  <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> Id <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">string</span> Name <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Query</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> List<span class="token operator">&lt;</span>Product<span class="token operator">&gt;</span> Products <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token generic-method"><span class="token function">List</span><span class="token punctuation">&lt;</span><span class="token class-name">Product</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">new</span> <span class="token class-name">Product</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token punctuation">{</span>
+        Id <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span>
+        Name <span class="token operator">=</span> <span class="token string">&quot;Avengers - End Game&quot;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;hello&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token keyword">public</span> <span class="token keyword">string</span> <span class="token function">GetHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token string">&quot;World&quot;</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;products&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token keyword">public</span> List<span class="token operator">&lt;</span>Product<span class="token operator">&gt;</span> <span class="token function">GetProducts</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> Data<span class="token punctuation">.</span>Products<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;product&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token keyword">public</span> <span class="token class-name">Product</span> <span class="token function">GetProductById</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> Data<span class="token punctuation">.</span>Products<span class="token punctuation">.</span><span class="token function">SingleOrDefault</span><span class="token punctuation">(</span> p <span class="token operator">=&gt;</span> p<span class="token punctuation">.</span>Id <span class="token operator">==</span> id <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span> 
+</code></pre></div><p>Above we add the methods <code>GetProducts()</code> and <code>GetProductById()</code> respectively.</p> <p>NOTE, to get input parameters we need to just specify those as an input params where they are used as with the method <code>GetProductById()</code></p> <p>Secondly we will add the file <code>Data.cs</code>, a static data repository, that will contain all the data we want to query for and change.</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token comment">// Data.cs</span>
+<span class="token keyword">using</span> System<span class="token punctuation">.</span>Collections<span class="token punctuation">.</span>Generic<span class="token punctuation">;</span>
+
+<span class="token keyword">namespace</span> app 
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Data</span> 
+  <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> List<span class="token operator">&lt;</span>Product<span class="token operator">&gt;</span> Products <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token generic-method"><span class="token function">List</span><span class="token punctuation">&lt;</span><span class="token class-name">Product</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">new</span> <span class="token class-name">Product</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token punctuation">{</span>
+        Id <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span>
+        Name <span class="token operator">=</span> <span class="token string">&quot;Avengers - End Game&quot;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>Lastly change <code>Program.cs</code> to look like this:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token keyword">using</span> System<span class="token punctuation">;</span>
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">;</span>
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">.</span>Types<span class="token punctuation">;</span>
+
+<span class="token keyword">namespace</span> app
+<span class="token punctuation">{</span>
+  <span class="token keyword">class</span> <span class="token class-name">Program</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">Main</span><span class="token punctuation">(</span><span class="token keyword">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">var</span> schema <span class="token operator">=</span> SchemaFactory<span class="token punctuation">.</span><span class="token function">Create</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">var</span> json <span class="token operator">=</span> schema<span class="token punctuation">.</span><span class="token function">Execute</span><span class="token punctuation">(</span>_ <span class="token operator">=&gt;</span>
+      <span class="token punctuation">{</span>
+        _<span class="token punctuation">.</span>Query <span class="token operator">=</span> <span class="token string">&quot;{ products { name } product(id: 1){ name  } }&quot;</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      Console<span class="token punctuation">.</span><span class="token function">WriteLine</span><span class="token punctuation">(</span>json<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>Followed by <code>dotnet run</code>, that should give the following output in the terminal:</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+  <span class="token property">&quot;data&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;products&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">{</span>
+        <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Avengers - End Game&quot;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;product&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Avengers - End Game&quot;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><strong>Supporting 'create product' - adding mutations</strong></p> <p>Now we know how to support queries, lets look into supporting scenarios in which we add data. We will support creating a product. They way we do that is by adding a mutation. Lets start with updating the schema file <code>Schema.cs</code>:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token keyword">using</span> GraphQL<span class="token punctuation">.</span>Types<span class="token punctuation">;</span>
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">;</span>
+
+<span class="token keyword">namespace</span> app
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SchemaFactory</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">ISchema</span> <span class="token function">Create</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">var</span> schema <span class="token operator">=</span> Schema<span class="token punctuation">.</span><span class="token function">For</span><span class="token punctuation">(</span><span class="token string">@&quot;
+          type Product {
+            id: ID,
+            name: String
+          }
+
+          input ProductInput {
+            name: String
+          }
+
+          type Mutation {
+            createProduct(product: ProductInput): Product
+          }
+
+          type Query {
+            hello: String,
+            products: [Product],
+            product(id: ID!): Product
+          }
+      &quot;</span><span class="token punctuation">,</span> _ <span class="token operator">=&gt;</span>
+      <span class="token punctuation">{</span>
+        _<span class="token punctuation">.</span>Types<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Include</span><span class="token punctuation">&lt;</span><span class="token class-name">Query</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        _<span class="token punctuation">.</span>Types<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Include</span><span class="token punctuation">&lt;</span><span class="token class-name">Mutation</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> schema<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>Above we added the type <code>Mutation</code> and in there we have added the <code>createProduct</code>, that takes a parameter <code>product</code> of type <code>ProductInput</code>. We can also see that we need to return something of type <code>Product</code>. <code>ProductInput</code> is of type <code>input</code> and is something we only use with mutations.  We've also added this row <code>_.Types.Include&lt;Mutation&gt;();</code> to support our <code>Mutation</code> class that we are about to create next.</p> <p>Ok, we got the contract explained to us, let's create the file <code>Mutation.cs</code> and give it the following content:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token comment">// Mutation</span>
+
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">.</span>Types<span class="token punctuation">;</span>
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">;</span>
+<span class="token keyword">using</span> System<span class="token punctuation">.</span>Linq<span class="token punctuation">;</span>
+<span class="token keyword">using</span> System<span class="token punctuation">.</span>Collections<span class="token punctuation">.</span>Generic<span class="token punctuation">;</span>
+
+<span class="token keyword">namespace</span> app
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Mutation</span>
+  <span class="token punctuation">{</span>
+    <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;createProduct&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token keyword">public</span> <span class="token class-name">Product</span> <span class="token function">CreateProduct</span><span class="token punctuation">(</span><span class="token class-name">Product</span> product<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      product<span class="token punctuation">.</span>Id <span class="token operator">=</span> Data<span class="token punctuation">.</span>Products<span class="token punctuation">.</span><span class="token function">Count</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
+      Data<span class="token punctuation">.</span>Products<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span>product<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> product<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>Above we have added the method <code>CreateProduct()</code>. We have also added the <code>Mutation</code> property of our object that we end up exporting.</p> <p>To test this mutation, change <code>Program.cs</code> to the following:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token keyword">using</span> System<span class="token punctuation">;</span>
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">;</span>
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">.</span>Types<span class="token punctuation">;</span>
+
+<span class="token keyword">namespace</span> app
+<span class="token punctuation">{</span>
+  <span class="token keyword">class</span> <span class="token class-name">Program</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">Main</span><span class="token punctuation">(</span><span class="token keyword">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">var</span> schema <span class="token operator">=</span> SchemaFactory<span class="token punctuation">.</span><span class="token function">Create</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">var</span> json <span class="token operator">=</span> schema<span class="token punctuation">.</span><span class="token function">Execute</span><span class="token punctuation">(</span>_ <span class="token operator">=&gt;</span>
+      <span class="token punctuation">{</span>
+        _<span class="token punctuation">.</span>Query <span class="token operator">=</span> <span class="token string">&quot;mutation { createProduct(product: { name: \&quot;Captain America - the first Avenger\&quot; }) { name }  }&quot;</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      Console<span class="token punctuation">.</span><span class="token function">WriteLine</span><span class="token punctuation">(</span>json<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>NOTE, how our query now says the following:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code>_<span class="token punctuation">.</span>Query <span class="token operator">=</span> <span class="token string">&quot;mutation { createProduct(product: { name: \&quot;Captain America - the first Avenger\&quot; }) { name }  }&quot;</span>
+</code></pre></div><p>Above we use the keyword <code>mutation</code>. They keyword <code>mutation</code> optionally takes an argument if you want to have named mutation. If you want many of the them you need to name them. That's beyond the scope of this workshop.</p> <h3 id="part-ii-adding-reviews-supporting-nested-queries"><a href="#part-ii-adding-reviews-supporting-nested-queries" aria-hidden="true" class="header-anchor">#</a> Part II - Adding reviews, supporting nested queries</h3> <p>Now we will extend our schema with the custom type <code>Review</code> and also support nested queries.</p> <p>To accomplish this we need to do the following:</p> <ol><li>Add a custom type definition to <code>Review</code> to <code>Schema.cs</code></li> <li>Add in memory data for reviews in <code>Data.cs</code></li> <li>Add resolver function to <code>Query.cs</code></li> <li>Try it out</li></ol> <p><strong>Add custom type definition</strong></p> <p>The definition of <code>Review</code> should look like this:</p> <div class="language- extra-class"><pre class="language-text"><code>type Review {
+  grade: Int,
+  title: String,
+  description: String,
+  product: Product
+}
+</code></pre></div><p>our <code>Schema.cs</code> should now look like this:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token keyword">using</span> GraphQL<span class="token punctuation">.</span>Types<span class="token punctuation">;</span>
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">;</span>
+
+<span class="token keyword">namespace</span> app
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SchemaFactory</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">ISchema</span> <span class="token function">Create</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">var</span> schema <span class="token operator">=</span> Schema<span class="token punctuation">.</span><span class="token function">For</span><span class="token punctuation">(</span><span class="token string">@&quot;
+          type Product {
+            id: ID,
+            name: String
+          }
+
+          type Review {
+            grade: Int,
+            title: String,
+            description: String,
+            product: Product
+          }
+
+          input ProductInput {
+            name: String
+          }
+
+          type Mutation {
+            createProduct(product: ProductInput): Product
+          }
+
+          type Query {
+            hello: String,
+            products: [Product],
+            product(id: ID!): Product,
+            reviews: [Review]
+          }
+      &quot;</span><span class="token punctuation">,</span> _ <span class="token operator">=&gt;</span>
+      <span class="token punctuation">{</span>
+        _<span class="token punctuation">.</span>Types<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Include</span><span class="token punctuation">&lt;</span><span class="token class-name">Query</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        _<span class="token punctuation">.</span>Types<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Include</span><span class="token punctuation">&lt;</span><span class="token class-name">Mutation</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> schema<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><strong>Add in memory data</strong></p> <p>Ensure <code>Data.cs</code> now looks like this:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token comment">// Data.cs</span>
+
+<span class="token keyword">using</span> System<span class="token punctuation">.</span>Collections<span class="token punctuation">.</span>Generic<span class="token punctuation">;</span>
+
+<span class="token keyword">namespace</span> app 
+<span class="token punctuation">{</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Product</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> Id <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">string</span> Name <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Review</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> Grade <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">string</span> Title <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">string</span> Description <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> Product <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Data</span> 
+  <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> List<span class="token operator">&lt;</span>Product<span class="token operator">&gt;</span> Products <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token generic-method"><span class="token function">List</span><span class="token punctuation">&lt;</span><span class="token class-name">Product</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">new</span> <span class="token class-name">Product</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token punctuation">{</span>
+        Id <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span>
+        Name <span class="token operator">=</span> <span class="token string">&quot;Avengers - End Game&quot;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> List<span class="token operator">&lt;</span>Review<span class="token operator">&gt;</span> Reviews <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token generic-method"><span class="token function">List</span><span class="token punctuation">&lt;</span><span class="token class-name">Review</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">new</span> <span class="token class-name">Review</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token punctuation">{</span>
+        Grade <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">,</span>
+        Title <span class="token operator">=</span> <span class="token string">&quot;Great movie&quot;</span><span class="token punctuation">,</span>
+        Description <span class="token operator">=</span> <span class="token string">&quot;Great actor playing Thanos&quot;</span><span class="token punctuation">,</span>
+        Product <span class="token operator">=</span> <span class="token number">1</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>NOTE, we moved <code>Product</code> class into <code>Data.cs</code> and removed it from <code>Query.cs</code>.</p> <p>Let's now add a method <code>GetReviews()</code> to our <code>Query.cs</code> class like so:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code>
+</code></pre></div><p>It's also nice to add a method that we can call in our resolver, like so:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;reviews&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+<span class="token keyword">public</span> <span class="token class-name">Product</span> <span class="token function">GetReviews</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">return</span> Data<span class="token punctuation">.</span>Reviews<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><code>Query.cs</code> should look like this, at this point:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token keyword">using</span> GraphQL<span class="token punctuation">.</span>Types<span class="token punctuation">;</span>
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">;</span>
+<span class="token keyword">using</span> System<span class="token punctuation">.</span>Linq<span class="token punctuation">;</span>
+<span class="token keyword">using</span> System<span class="token punctuation">.</span>Collections<span class="token punctuation">.</span>Generic<span class="token punctuation">;</span>
+
+<span class="token keyword">namespace</span> app
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Query</span>
+  <span class="token punctuation">{</span>
+    <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;hello&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token keyword">public</span> <span class="token keyword">string</span> <span class="token function">GetHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token string">&quot;World&quot;</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;products&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token keyword">public</span> List<span class="token operator">&lt;</span>Product<span class="token operator">&gt;</span> <span class="token function">GetProducts</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> Data<span class="token punctuation">.</span>Products<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;product&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token keyword">public</span> <span class="token class-name">Product</span> <span class="token function">GetProductById</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> Data<span class="token punctuation">.</span>Products<span class="token punctuation">.</span><span class="token function">SingleOrDefault</span><span class="token punctuation">(</span> p <span class="token operator">=&gt;</span> p<span class="token punctuation">.</span>Id <span class="token operator">==</span> id <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;reviews&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token keyword">public</span> <span class="token class-name">Product</span> <span class="token function">GetReviews</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> Data<span class="token punctuation">.</span>Reviews<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span> 
+</code></pre></div><p><strong>Add nested resolver function</strong></p> <p>We are about to support a query like this:</p> <div class="language- extra-class"><pre class="language-text"><code>{
+  reviews {
+    product { name }
+  }
+}
+</code></pre></div><p>For that to be possible we need a function with the capability to turn an integer into a <code>Product</code> object. Why am I saying that? Look at the review data one more time:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token keyword">new</span> <span class="token class-name">Review</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  Grade <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">,</span>
+  Title <span class="token operator">=</span> <span class="token string">&quot;Great movie&quot;</span><span class="token punctuation">,</span>
+  Description <span class="token operator">=</span> <span class="token string">&quot;Great actor playing Thanos&quot;</span><span class="token punctuation">,</span>
+  Product <span class="token operator">=</span> <span class="token number">1</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>The <code>Product</code> field is pointing to <code>1</code> not a <code>Product</code> object. How to fix? Well, GraphQL will try to resolve this for us providing we give it a provider of Type <code>Review</code> that is a able to solve our <code>Product</code> field. The Provider should look something like this:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;Review&quot;</span><span class="token punctuation">,</span> IsTypeOf <span class="token operator">=</span> <span class="token keyword">typeof</span><span class="token punctuation">(</span>Review<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ReviewResolver</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">string</span> <span class="token function">Title</span><span class="token punctuation">(</span><span class="token class-name">Review</span> review<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> review<span class="token punctuation">.</span>Title<span class="token punctuation">;</span>
+  <span class="token keyword">public</span> <span class="token keyword">string</span> <span class="token function">Description</span><span class="token punctuation">(</span><span class="token class-name">Review</span> review<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> review<span class="token punctuation">.</span>Description<span class="token punctuation">;</span>
+  <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">Grade</span><span class="token punctuation">(</span><span class="token class-name">Review</span> review<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> review<span class="token punctuation">.</span>Grade<span class="token punctuation">;</span>
+  <span class="token keyword">public</span> <span class="token class-name">Product</span> <span class="token function">Product</span><span class="token punctuation">(</span><span class="token class-name">ResolveFieldContext</span> context<span class="token punctuation">,</span> <span class="token class-name">Review</span> review<span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> Data<span class="token punctuation">.</span>Products<span class="token punctuation">.</span><span class="token function">SingleOrDefault</span><span class="token punctuation">(</span>p <span class="token operator">=&gt;</span> p<span class="token punctuation">.</span>Id <span class="token operator">==</span> review<span class="token punctuation">.</span>Product<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>What we are saying above is that simple fields simply are resolved like this:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token keyword">public</span> <span class="token keyword">string</span> <span class="token function">Title</span><span class="token punctuation">(</span><span class="token class-name">Review</span> review<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> review<span class="token punctuation">.</span>Title<span class="token punctuation">;</span>
+</code></pre></div><p>whereas fields that are integers, that we know point to real objects, according to our schema, will be resolved by methods instead like the <code>Product()</code> method that actively looks up our <code>1</code> and turns it into a <code>Product</code>.</p> <p>Our <code>Query.cs</code> should now look like this:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token keyword">using</span> GraphQL<span class="token punctuation">.</span>Types<span class="token punctuation">;</span>
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">;</span>
+<span class="token keyword">using</span> System<span class="token punctuation">.</span>Linq<span class="token punctuation">;</span>
+<span class="token keyword">using</span> System<span class="token punctuation">.</span>Collections<span class="token punctuation">.</span>Generic<span class="token punctuation">;</span>
+
+<span class="token keyword">namespace</span> app
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Query</span>
+  <span class="token punctuation">{</span>
+    <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;hello&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token keyword">public</span> <span class="token keyword">string</span> <span class="token function">GetHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token string">&quot;World&quot;</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;products&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token keyword">public</span> List<span class="token operator">&lt;</span>Product<span class="token operator">&gt;</span> <span class="token function">GetProducts</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> Data<span class="token punctuation">.</span>Products<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;product&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token keyword">public</span> <span class="token class-name">Product</span> <span class="token function">GetProductById</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> Data<span class="token punctuation">.</span>Products<span class="token punctuation">.</span><span class="token function">SingleOrDefault</span><span class="token punctuation">(</span> p <span class="token operator">=&gt;</span> p<span class="token punctuation">.</span>Id <span class="token operator">==</span> id <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;reviews&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token keyword">public</span> List<span class="token operator">&lt;</span>Review<span class="token operator">&gt;</span> <span class="token function">GetReviews</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> Data<span class="token punctuation">.</span>Reviews<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;Review&quot;</span><span class="token punctuation">,</span> IsTypeOf <span class="token operator">=</span> <span class="token keyword">typeof</span><span class="token punctuation">(</span>Review<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+  <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ReviewResolver</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">string</span> <span class="token function">Title</span><span class="token punctuation">(</span><span class="token class-name">Review</span> review<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> review<span class="token punctuation">.</span>Title<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">string</span> <span class="token function">Description</span><span class="token punctuation">(</span><span class="token class-name">Review</span> review<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> review<span class="token punctuation">.</span>Description<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">Grade</span><span class="token punctuation">(</span><span class="token class-name">Review</span> review<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> review<span class="token punctuation">.</span>Grade<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token class-name">Product</span> <span class="token function">Product</span><span class="token punctuation">(</span><span class="token class-name">ResolveFieldContext</span> context<span class="token punctuation">,</span> <span class="token class-name">Review</span> review<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> Data<span class="token punctuation">.</span>Products<span class="token punctuation">.</span><span class="token function">SingleOrDefault</span><span class="token punctuation">(</span>p <span class="token operator">=&gt;</span> p<span class="token punctuation">.</span>Id <span class="token operator">==</span> review<span class="token punctuation">.</span>Product<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span> 
+</code></pre></div><p>Don't forget to add this line <code>_.Types.Include&lt;ReviewResolver&gt;();</code> to <code>Schema.cs</code> so that file now looks like this:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token comment">// Schema.cs</span>
+
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">.</span>Types<span class="token punctuation">;</span>
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">;</span>
+
+<span class="token keyword">namespace</span> app
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SchemaFactory</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">ISchema</span> <span class="token function">Create</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">var</span> schema <span class="token operator">=</span> Schema<span class="token punctuation">.</span><span class="token function">For</span><span class="token punctuation">(</span><span class="token string">@&quot;
+          type Product {
+            id: ID,
+            name: String
+          }
+
+          type Review {
+            grade: Int,
+            title: String,
+            description: String,
+            product: Product
+          }
+
+          input ProductInput {
+            name: String
+          }
+
+          type Mutation {
+            createProduct(product: ProductInput): Product
+          }
+
+          type Query {
+            hello: String,
+            products: [Product],
+            product(id: ID!): Product,
+            reviews: [Review]
+          }
+      &quot;</span><span class="token punctuation">,</span> _ <span class="token operator">=&gt;</span>
+      <span class="token punctuation">{</span>
+        _<span class="token punctuation">.</span>Types<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Include</span><span class="token punctuation">&lt;</span><span class="token class-name">Query</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        _<span class="token punctuation">.</span>Types<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Include</span><span class="token punctuation">&lt;</span><span class="token class-name">Mutation</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        _<span class="token punctuation">.</span>Types<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Include</span><span class="token punctuation">&lt;</span><span class="token class-name">ReviewResolver</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> schema<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>Finally let's try this out by altering <code>Program.cs</code> to:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token comment">// Program.cs</span>
+
+<span class="token keyword">using</span> System<span class="token punctuation">;</span>
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">;</span>
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">.</span>Types<span class="token punctuation">;</span>
+
+<span class="token keyword">namespace</span> app
+<span class="token punctuation">{</span>
+  <span class="token keyword">class</span> <span class="token class-name">Program</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">Main</span><span class="token punctuation">(</span><span class="token keyword">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">var</span> schema <span class="token operator">=</span> SchemaFactory<span class="token punctuation">.</span><span class="token function">Create</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">var</span> json <span class="token operator">=</span> schema<span class="token punctuation">.</span><span class="token function">Execute</span><span class="token punctuation">(</span>_ <span class="token operator">=&gt;</span>
+      <span class="token punctuation">{</span>
+        _<span class="token punctuation">.</span>Query <span class="token operator">=</span> <span class="token string">&quot;{ reviews { product { name } } }&quot;</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      Console<span class="token punctuation">.</span><span class="token function">WriteLine</span><span class="token punctuation">(</span>json<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>NOTE, how this line <code>_.Query= &quot;{ reviews { product { name } } }&quot;</code> queries in a nested way and forces our code to resolve our <code>product</code> property. Executing this with <code>dotnet run</code> should give you the following output:</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+  <span class="token property">&quot;data&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;reviews&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">{</span>
+        <span class="token property">&quot;product&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+          <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Avengers - End Game&quot;</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="solution"><a href="#solution" aria-hidden="true" class="header-anchor">#</a> Solution</h2> <p>TODO</p> <p><a href="https://github.com/softchris/serverless-graphql-microservices/tree/master/part2" target="_blank" rel="noopener noreferrer">SOLUTION intro<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <p><a href="https://github.com/softchris/serverless-graphql-microservices/tree/master/part2" target="_blank" rel="noopener noreferrer">SOLUTION workshop part 2<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></div> <footer class="page-edit"><!----> <!----></footer> <!----> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.af5fbcab.js" defer></script><script src="/assets/js/2.6f3293a0.js" defer></script><script src="/assets/js/9.1ff2cd94.js" defer></script>
+  </body>
+</html>

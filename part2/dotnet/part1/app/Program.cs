@@ -17,7 +17,12 @@ namespace app
             _.Types.Include<Query>();
             });
 
-            Console.WriteLine("Hello World!");
+            var json = schema.Execute(_ =>
+            {
+                _.Query = "{ hello }";
+            });
+
+            Console.WriteLine(json);
         }
     }
 }

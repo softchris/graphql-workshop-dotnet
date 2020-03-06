@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <link rel="icon" href="/favicon.ico">
     
-    <link rel="preload" href="/assets/css/0.styles.1c371215.css" as="style"><link rel="preload" href="/assets/js/app.63cbaf33.js" as="script"><link rel="preload" href="/assets/js/2.f8dac7df.js" as="script"><link rel="preload" href="/assets/js/8.4a629e3a.js" as="script"><link rel="prefetch" href="/assets/js/10.8163466a.js"><link rel="prefetch" href="/assets/js/11.b4874df9.js"><link rel="prefetch" href="/assets/js/12.acbdda7c.js"><link rel="prefetch" href="/assets/js/13.be970c90.js"><link rel="prefetch" href="/assets/js/3.295021d7.js"><link rel="prefetch" href="/assets/js/4.dadc6ac6.js"><link rel="prefetch" href="/assets/js/5.57b65144.js"><link rel="prefetch" href="/assets/js/6.6a99a669.js"><link rel="prefetch" href="/assets/js/7.143a84b8.js"><link rel="prefetch" href="/assets/js/9.2b669424.js">
+    <link rel="preload" href="/assets/css/0.styles.1c371215.css" as="style"><link rel="preload" href="/assets/js/app.7524a916.js" as="script"><link rel="preload" href="/assets/js/2.f8dac7df.js" as="script"><link rel="preload" href="/assets/js/8.3fd0fe42.js" as="script"><link rel="prefetch" href="/assets/js/10.8163466a.js"><link rel="prefetch" href="/assets/js/11.16c73e61.js"><link rel="prefetch" href="/assets/js/12.fbc0515a.js"><link rel="prefetch" href="/assets/js/13.be970c90.js"><link rel="prefetch" href="/assets/js/3.295021d7.js"><link rel="prefetch" href="/assets/js/4.dadc6ac6.js"><link rel="prefetch" href="/assets/js/5.57b65144.js"><link rel="prefetch" href="/assets/js/6.46c89de5.js"><link rel="prefetch" href="/assets/js/7.31fc7c42.js"><link rel="prefetch" href="/assets/js/9.9fc2ed40.js">
     <link rel="stylesheet" href="/assets/css/0.styles.1c371215.css">
   </head>
   <body>
@@ -777,13 +777,14 @@ product(id: ID!): Product
     <span class="token punctuation">}</span>
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-</code></pre></div><p>NOTE, we moved <code>Product</code> class into <code>Data.cs</code> and removed it from <code>Query.cs</code>.</p> <p>Let's now add a method <code>GetReviews()</code> to our <code>Query.cs</code> class like so:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code>
-</code></pre></div><p>It's also nice to add a method that we can call in our resolver, like so:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;reviews&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+</code></pre></div><p>NOTE, we moved <code>Product</code> class into <code>Data.cs</code> and removed it from <code>Query.cs</code>.</p> <p>Let's now add a method <code>GetReviews()</code> to our <code>Query.cs</code> class like so:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token punctuation">[</span><span class="token class-name">GraphQLMetadata</span><span class="token punctuation">(</span><span class="token string">&quot;reviews&quot;</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
 <span class="token keyword">public</span> <span class="token class-name">Product</span> <span class="token function">GetReviews</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
   <span class="token keyword">return</span> Data<span class="token punctuation">.</span>Reviews<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre></div><p><code>Query.cs</code> should look like this, at this point:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token keyword">using</span> GraphQL<span class="token punctuation">.</span>Types<span class="token punctuation">;</span>
+</code></pre></div><p><code>Query.cs</code> should look like this, at this point:</p> <div class="language-csharp extra-class"><pre class="language-csharp"><code><span class="token comment">// Query.cs</span>
+
+<span class="token keyword">using</span> GraphQL<span class="token punctuation">.</span>Types<span class="token punctuation">;</span>
 <span class="token keyword">using</span> GraphQL<span class="token punctuation">;</span>
 <span class="token keyword">using</span> System<span class="token punctuation">.</span>Linq<span class="token punctuation">;</span>
 <span class="token keyword">using</span> System<span class="token punctuation">.</span>Collections<span class="token punctuation">.</span>Generic<span class="token punctuation">;</span>
@@ -968,7 +969,7 @@ product(id: ID!): Product
     <span class="token punctuation">]</span>
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-</code></pre></div><h2 id="solution"><a href="#solution" aria-hidden="true" class="header-anchor">#</a> Solution</h2> <p><a href="https://github.com/softchris/graphql-workshop-dotnet/tree/master/part2/dotnet/part1/app" target="_blank" rel="noopener noreferrer">SOLUTION intro<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <p><a href="https://github.com/softchris/graphql-workshop-dotnet/tree/master/part2/dotnet/part2/app" target="_blank" rel="noopener noreferrer">SOLUTION workshop part 2<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last Updated: </span> <span class="time">3/6/2020, 8:22:12 AM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+</code></pre></div><h2 id="solution"><a href="#solution" aria-hidden="true" class="header-anchor">#</a> Solution</h2> <p><a href="https://github.com/softchris/graphql-workshop-dotnet/tree/master/part2/dotnet/part1/app" target="_blank" rel="noopener noreferrer">SOLUTION intro<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <p><a href="https://github.com/softchris/graphql-workshop-dotnet/tree/master/part2/dotnet/part2/app" target="_blank" rel="noopener noreferrer">SOLUTION workshop part 2<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last Updated: </span> <span class="time">3/6/2020, 8:28:10 AM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
         ←
         <a href="/workshop/1.html" class="prev">
           🍕Introduction - What is GraphQL and Serverless?
@@ -977,6 +978,6 @@ product(id: ID!): Product
         </a>
         →
       </span></p></div> </main></div><div class="global-ui"></div></div>
-    <script src="/assets/js/app.63cbaf33.js" defer></script><script src="/assets/js/2.f8dac7df.js" defer></script><script src="/assets/js/8.4a629e3a.js" defer></script>
+    <script src="/assets/js/app.7524a916.js" defer></script><script src="/assets/js/2.f8dac7df.js" defer></script><script src="/assets/js/8.3fd0fe42.js" defer></script>
   </body>
 </html>

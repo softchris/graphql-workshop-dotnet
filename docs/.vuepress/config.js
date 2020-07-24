@@ -58,6 +58,7 @@ module.exports = {
           { text: 'Código de Conduta', link: '' }
         ],
         sidebar: [
+          { title: 'Teste sidebar', path: '/docs/pt-br/workshop/0' },
           { title: '🍕 Introdução - O que é GraphQL e computação sem servidor?', path: '/docs/pt-br/workshop/1' },
           { title: '🔎 API do GraphQL', path: '/docs/pt-br/workshop/2' },
           { title: '📦 Microsserviços e o Docker', path: '/docs/pt-br/workshop/3' },

@@ -38,7 +38,7 @@ module.exports = {
           { text: 'Main Page', link: '/' },
           { text: 'Videos', link: 'https://www.youtube.com/user/l32759' },
           { text: 'Doubts?', link: 'https://github.com/softchris/graphql-workshop-dotnet/issues' },
-          { text: 'Code of Conduct', link: '' }
+          { text: 'Code of Conduct', link: '/workshop/CODE_OF_CONDUCT' },
         ],
         sidebar: [
           { title: '🍕 Introduction - What is GraphQL and Serverless?', children: ['/workshop/1'] },
@@ -55,7 +55,7 @@ module.exports = {
           { text: 'Página Principal', link: '/pt-br/' },
           { text: 'Videos', link: 'https://www.youtube.com/user/l32759' },
           { text: 'Dúvidas', link: 'https://github.com/softchris/graphql-workshop-dotnet/issues' },
-          { text: 'Código de Conduta', link: '' }
+          { text: 'Código de Conduta', link: '/pt-br/CODE_OF_CONDUCT' },
         ],
         sidebar: [
           { title: '🍕 Introdução - O que é GraphQL e computação sem servidor?', children: ['/pt-br/workshop/1'] },

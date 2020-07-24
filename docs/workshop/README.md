@@ -1,3 +1,11 @@
+---
+title: Welcome to GraphQL + .NET Core + Azure Functions Workshop
+---
+
+# Welcome to GraphQL + .NET Core + Azure Functions Workshop
+
+[![grapql-image.png](https://i.postimg.cc/pV7jjzcH/grapql-image.png)](https://postimg.cc/DmrmkJKj)
+
 GraphQL in .NET Core is a little bit different than the JavaScript implementation. Not a whole lot though.
 
 What is the same are the following concepts

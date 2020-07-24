@@ -25,7 +25,7 @@
 3. Now type the command below to run locally the project on your machine:
 
 ```bash
-> npm run dev
+> npm run docs:dev
 ```
 
 4. Now open your browser in: `localhost:8080` and will open the main workshop page.

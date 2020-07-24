@@ -41,11 +41,11 @@ module.exports = {
           { text: 'Code of Conduct', link: '' }
         ],
         sidebar: [
-          { title: '🍕 Introduction - What is GraphQL and Serverless?', path: '/workshop/1' },
-          { title: '🔎 The GraphQL API', path: '/workshop/2' },
-          { title: '📦 Microservices and Docker', path: '/workshop/3' },
-          { title: '☁️ Serverless Functions', path: '/workshop/4' },
-          { title: '🚀 Deploy your app', path: '/workshop/5' }
+          { title: '🍕 Introduction - What is GraphQL and Serverless?', children: ['/workshop/1'] },
+          { title: '🔎 The GraphQL API', children: ['/workshop/2'] },
+          { title: '📦 Microservices and Docker', children: ['/workshop/3'] },
+          { title: '☁️ Serverless Functions', children: ['/workshop/4'] },
+          { title: '🚀 Deploy your app', children: ['/workshop/5'] }
         ],
       },
       '/pt-br/': {
@@ -58,12 +58,11 @@ module.exports = {
           { text: 'Código de Conduta', link: '' }
         ],
         sidebar: [
-          { title: 'Teste sidebar', path: '/docs/pt-br/workshop/0' },
-          { title: '🍕 Introdução - O que é GraphQL e computação sem servidor?', path: '/docs/pt-br/workshop/1' },
-          { title: '🔎 API do GraphQL', path: '/docs/pt-br/workshop/2' },
-          { title: '📦 Microsserviços e o Docker', path: '/docs/pt-br/workshop/3' },
-          { title: '☁️ Funções sem servidor', path: '/docs/pt-br/workshop/4' },
-          { title: '🚀 Implantando sua aplicação', path: '/docs/pt-br/workshop/5' }  
+          { title: '🍕 Introdução - O que é GraphQL e computação sem servidor?', children: ['/pt-br/workshop/1'] },
+          { title: '🔎 API do GraphQL', children: ['/docs/pt-br/workshop/2'] },
+          { title: '📦 Microsserviços e o Docker', children: ['/docs/pt-br/workshop/3'] },
+          { title: '☁️ Funções sem servidor', children: ['/docs/pt-br/workshop/4'] },
+          { title: '🚀 Implantando sua aplicação', children: ['/docs/pt-br/workshop/5'] }  
         ]
       },
     }, // fim colchete de locales

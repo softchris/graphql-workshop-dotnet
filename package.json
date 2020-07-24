@@ -4,7 +4,7 @@
   "description": "A workshop by Azure Cloud Developer Advocates to teach Serverless and GraphQL using Azure",
   "scripts": {
     "docs:build": "vuepress build docs",
-    "dev": "vuepress dev docs"
+    "docs:dev": "vuepress dev docs"
   },
   "keywords": [
     "vuepress",
@@ -15,7 +15,7 @@
   "author": "Chris Noring <@chris_noring>, Glaucia Lemos <@glaucia_lemos86> ",
   "license": "MIT",
   "dependencies": {
-    "vuepress": "^1.2.0"
+    "vuepress": "^1.5.2"
   },
   "repository": {
     "type": "git",

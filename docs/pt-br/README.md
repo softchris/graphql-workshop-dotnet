@@ -1,10 +1,10 @@
 ---
 home: true
-heroImage: /bit.png
+heroImage: /Bit_Learning.png
 heroText: Workshop de GraphQL
-tagline: Aprenda sobre GraphQL e API's com os Cloud Advocate
+tagline: Aprenda sobre GraphQL e API's com os Cloud Advocates
 actionText: Vamos começar?!
-actionLink: /pt-br/workshop/1
+actionLink: /pt-br/workshop/
 features:
     - title: Explore a API do GraphQL 
       details: Aprenda sobre o schema do GraphQL, resolvers, data types, query language, mutations e o GraphQL UI

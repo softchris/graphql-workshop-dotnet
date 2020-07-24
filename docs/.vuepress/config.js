@@ -59,10 +59,10 @@ module.exports = {
         ],
         sidebar: [
           { title: '🍕 Introdução - O que é GraphQL e computação sem servidor?', children: ['/pt-br/workshop/1'] },
-          { title: '🔎 API do GraphQL', children: ['/docs/pt-br/workshop/2'] },
-          { title: '📦 Microsserviços e o Docker', children: ['/docs/pt-br/workshop/3'] },
-          { title: '☁️ Funções sem servidor', children: ['/docs/pt-br/workshop/4'] },
-          { title: '🚀 Implantando sua aplicação', children: ['/docs/pt-br/workshop/5'] }  
+          { title: '🔎 API do GraphQL', children: ['/pt-br/workshop/2'] },
+          { title: '📦 Microsserviços e o Docker', children: ['/pt-br/workshop/3'] },
+          { title: '☁️ Funções sem servidor', children: ['/pt-br/workshop/4'] },
+          { title: '🚀 Implantando sua aplicação', children: ['/pt-br/workshop/5'] }  
         ]
       },
     }, // fim colchete de locales

@@ -3,19 +3,23 @@
   "version": "1.0.0",
   "description": "A workshop by Azure Cloud Developer Advocates to teach Serverless and GraphQL using Azure",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "docs:build": "vuepress build docs",
     "dev": "vuepress dev docs"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "vuepress",
+    "nodejs",
+    "javascript",
+    "vue"
+  ],
+  "author": "Chris Noring <@chris_noring>, Glaucia Lemos <@glaucia_lemos86> ",
   "license": "MIT",
   "dependencies": {
     "vuepress": "^1.2.0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/softchris/serverless-graphql-microservices.git"
+    "url": "https://github.com/softchris/serverless-graphql-microservices.git"
   },
   "bugs": {
     "url": "https://github.com/softchris/serverless-graphql-microservices/issues"

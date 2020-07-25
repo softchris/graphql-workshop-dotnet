@@ -47,3 +47,21 @@ public class Query
 Acima, temos a abordagem do C# em que temos uma classe `Query` e um método que é decorado com uma classe de atributo `GraphQLMetadata` e um parâmetro `hello` que é o recurso que ele resolve. Invocar nosso método `GetHello()` nos forneceria a resposta que buscamos. 
 
 Essa é uma explicação muito breve de como o JavaScript e o C# diferem.
+
+## O que eu preciso saber para continuar esse workshop?
+
+Para dar continuidade nesse workshop, se faz necessário ter conhecimento em:
+
+* **[C#](https://docs.microsoft.com/dotnet/csharp/tutorials/intro-to-csharp/?WT.mc_id=graphql_workshop-github-gllemos)**
+* **[.NET Core](https://docs.microsoft.com/dotnet/core/introduction?WT.mc_id=graphql_workshop-github-gllemos)**
+* **[GraphQL](https://graphql.org/learn/)**
+* **[Azure Functions](https://docs.microsoft.com/azure/azure-functions/functions-overview?WT.mc_id=graphql_workshop-github-gllemos)**
+* **[App Service](https://docs.microsoft.com/azure/app-service/app-service-web-get-started-dotnet?WT.mc_id=graphql_workshop-github-gllemos)**
+
+Porém, caso não tenha, deixaremos alguns recursos e links importantes de alguns cursos gratuitos sobre:
+
+* **[Cursos Gratuitos - Microsoft Learn: C# & .NET Core](https://docs.microsoft.com/learn/browse/?products=dotnet&WT.mc_id=graphql_workshop-github-gllemos)**
+* **[Cursos Gratuitos - Microsoft Learn: Serverless & Azure Functions](https://docs.microsoft.com/learn/paths/create-serverless-applications/?WT.mc_id=graphql_workshop-github-gllemos)**
+* **[Tutoriais Azure App Service - Documentação Oficial](https://docs.microsoft.com/azure/app-service/overview?WT.mc_id=graphql_workshop-github-gllemos)**
+
+

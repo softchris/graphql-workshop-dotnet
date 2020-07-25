@@ -2,8 +2,8 @@
 home: true
 heroImage: /Bit_Learning.png
 heroText: Workshop de GraphQL
-tagline: Aprenda sobre GraphQL e API's com os Cloud Advocates
-actionText: Vamos começar?!
+tagline: Aprenda sobre GraphQL + .NET Core + Azure Functions com os Cloud Advocates!
+actionText: Vamos Começar?!
 actionLink: /pt-br/workshop/
 features:
     - title: Explore a API do GraphQL 

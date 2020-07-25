@@ -48,3 +48,18 @@ Above we have the C# approach in which we have a `Query` class and a method that
 
 That is a very brief explanation of how JavaScript and C# differs.
 
+## What do I need to know to continue this workshop?
+
+To continue this workshop, it is necessary to have knowledge in:
+
+* **[C#](https://docs.microsoft.com/dotnet/csharp/tutorials/intro-to-csharp/?WT.mc_id=graphql_workshop-github-chnoring)**
+* **[.NET Core](https://docs.microsoft.com/dotnet/core/introduction?WT.mc_id=graphql_workshop-github-chnoring)**
+* **[GraphQL](https://graphql.org/learn/)**
+* **[Azure Functions](https://docs.microsoft.com/azure/azure-functions/functions-overview?WT.mc_id=graphql_workshop-github-chnoring)**
+* **[App Service](https://docs.microsoft.com/azure/app-service/app-service-web-get-started-dotnet?WT.mc_id=graphql_workshop-github-chnoring)**
+
+However, if not, we will send here for you some important resources and links for some free courses on:
+
+* **[Cursos Gratuitos - Microsoft Learn: C# & .NET Core](https://docs.microsoft.com/learn/browse/?products=dotnet&WT.mc_id=graphql_workshop-github-chnoring)**
+* **[Cursos Gratuitos - Microsoft Learn: Serverless & Azure Functions](https://docs.microsoft.com/learn/paths/create-serverless-applications/?WT.mc_id=graphql_workshop-github-chnoring)**
+* **[Tutoriais Azure App Service - Documentação Oficial](https://docs.microsoft.com/azure/app-service/overview?WT.mc_id=graphql_workshop-github-chnoring)**

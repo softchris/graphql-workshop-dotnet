@@ -36,7 +36,7 @@ module.exports = {
         label: 'English',
         nav: [
           { text: 'Main Page', link: '/' },
-          { text: 'Videos', link: 'https://www.youtube.com/user/l32759' },
+          { text: 'Videos', link: 'https://channel9.msdn.com/Search?term=graphql&lang-en=true&WT.mc_id=workshop_graphql-github-chnoring' },
           { text: 'Doubts?', link: 'https://github.com/softchris/graphql-workshop-dotnet/issues' },
           { text: 'Code of Conduct', link: '/workshop/CODE_OF_CONDUCT' },
         ],
@@ -53,7 +53,7 @@ module.exports = {
         label: 'Português',
         nav: [
           { text: 'Página Principal', link: '/pt-br/' },
-          { text: 'Videos', link: 'https://www.youtube.com/user/l32759' },
+          { text: 'Videos', link: 'https://channel9.msdn.com/Search?term=graphql&lang-en=true&WT.mc_id=workshop_graphql-github-gllemos' },
           { text: 'Dúvidas', link: 'https://github.com/softchris/graphql-workshop-dotnet/issues' },
           { text: 'Código de Conduta', link: '/pt-br/CODE_OF_CONDUCT' },
         ],

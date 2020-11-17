@@ -4,7 +4,7 @@
 
 ## 🚀 Resources & Tools Used
 
-* **[Visual Studio Code](https://code.visualstudio.com/?WT.mc_id=workshop_graphql-github-chnoring)**
+* **[Visual Studio Code](https://code.visualstudio.com/?WT.mc_id=academic-0000-chnoring)**
 * **[Node.js](https://nodejs.org/en/)**
 * **[VuePress](https://vuepress.vuejs.org/)**
 
